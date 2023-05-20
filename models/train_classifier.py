@@ -95,7 +95,7 @@ def build_model():
     }
 
     # Perform grid search
-    cv = GridSearchCV(pipeline, param_grid, cv=3)
+    cv = GridSearchCV(pipeline, param_grid)
 
     return cv
 
