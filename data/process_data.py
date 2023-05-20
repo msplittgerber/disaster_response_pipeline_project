@@ -52,7 +52,8 @@ def clean_data(df):
     df = pd.concat([df, categories], axis=1)
     # drop duplicates
     df = df.drop_duplicates()
-    
+    # recode "related" column to binary values
+    df["related"] = df["related"].map(lambda x: 0 if x == 0 else 1)
     return df
 
 

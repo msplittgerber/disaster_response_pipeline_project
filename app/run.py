@@ -48,7 +48,6 @@ def index():
     cbool = (df.iloc[:,4:] != 0).sum().values
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -65,6 +64,25 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=cnames,
+                    y=cbool
+                )
+            ],
+
+            'layout': {
+                'title': 'Message Category Distribution',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category",
+                    'tickangle': 30
                 }
             }
         }
