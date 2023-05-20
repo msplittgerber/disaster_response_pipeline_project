@@ -6,6 +6,18 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    Load and merge data from message and categories CSV files.
+
+    Parameters:
+        messages_filepath (str): Filepath of the messages CSV file.
+        categories_filepath (str): Filepath of the categories CSV file.
+
+    Returns:
+        pandas.DataFrame: Merged DataFrame containing message and categories data.
+
+    """
+
     msg_df = pd.read_csv(messages_filepath)
     cat_df = pd.read_csv(categories_filepath)
     df = msg_df.merge(cat_df, on=('id'))
@@ -13,6 +25,17 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    Clean and preprocess the input DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The input DataFrame to be cleaned.
+
+    Returns:
+        pandas.DataFrame: The cleaned DataFrame.
+
+    """
+
     # create a dataframe of the 36 individual category columns
     categories = df["categories"].str.split(pat = ";", expand=True)
     row = categories.loc[1,:]
@@ -34,9 +57,27 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
-    engine = create_engine("sqlite:///"+database_filename)
-    df.to_sql('DisasterDF', engine, index=False, if_exists="replace")
-    return True  
+    """
+    Save a DataFrame to a SQLite database.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame to be saved.
+        database_filename (str): Filepath of the SQLite database.
+
+    Returns:
+        bool: True if the data is successfully saved, False otherwise.
+
+    """
+    
+    #engine = create_engine("sqlite:///"+database_filename)
+    #df.to_sql('DisasterDF', engine, index=False, if_exists="replace") 
+    try:
+        engine = create_engine("sqlite:///" + database_filename)
+        df.to_sql('DisasterDF', engine, index=False, if_exists="replace")
+        return True
+    except Exception as e:
+        print(f"Error occurred while saving data to the database: {str(e)}")
+        return False
 
 
 def main():
